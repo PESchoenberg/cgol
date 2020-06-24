@@ -21,6 +21,7 @@ a folder of your choice and cd into it.
 
 ## Uninstall:
 
+
 * You just need to remove the folder containing cgol.
 
 
