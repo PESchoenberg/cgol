@@ -1,10 +1,9 @@
 # cgol - Conway's game of life.
 
 
-
 ## Overview:
 
-A simple version of Conway's game of life.
+A simple version of Conway's game of life written in Fortran and OpenMP.
 
 
 ## Dependencies and requirements:
@@ -22,7 +21,8 @@ a folder of your choice and cd into it.
 
 ## Uninstall:
 
-* You just need to remove the cgol folder.
+
+* You just need to remove the folder containing cgol.
 
 
 ## Usage:
@@ -35,7 +35,7 @@ a folder of your choice and cd into it.
 
     - ./cgol.sh <ENT> at the command line.
 
-Then run ./cgol
+  -  The run ./cgol
 
 
 ## Credits and Sources:
