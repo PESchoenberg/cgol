@@ -330,30 +330,29 @@ contains
   !> - p_f1: initial population.
   !> - p_r1: rule to apply.
   !>
-  subroutine cgol_life(p_o2, p_w1 , p_t1, p_f1, p_r1, p_t3, p_t4, p_t5)
+  subroutine cgol_life(p_w1, p_c1)
 
     implicit none
-    integer :: p_t1, i1, j1, t1, p_o2, p_r1, p_t3, p_t4, p_t5
-    integer, dimension( : , : ) :: p_w1
-    real:: p_f1
+    integer :: i1, j1, t1
+    integer, dimension( : , : ) :: p_w1, p_c1
 
     i1 = 0
     j1 = 0
     
     !> Generation of the initial world conditions.
-    call cgol_randomize_world(p_w1, p_f1)
+    call cgol_randomize_world(p_w1, (p_c1(5,1)/100.00))
           
     !> Repeat this p_t1 times.
-    do t1 = 1, p_t1
+    do t1 = 1, p_c1(4,1)
 
        !$OMP SECTIONS
 
        !$OMP SECTION
-       call cgol_display_world(p_w1, t1, p_t1, p_t3, p_t4)
+       call cgol_display_world(p_w1, t1, p_c1(4,1), p_c1(7,1), p_c1(8,1))
        !$OMP END SECTION
 
        !$OMP SECTION
-       call cgol_calculate_iteration(p_o2, p_w1, p_r1)
+       call cgol_calculate_iteration(p_c1(3,1), p_w1, p_c1(6,1))
        !$OMP END SECTION
 
        !$OMP BARRIER

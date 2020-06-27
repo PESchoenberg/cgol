@@ -31,8 +31,10 @@
 !>   https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life [Accessed 18 June 2020].
 !> - Gcc.gnu.org. 2020. Top (The GNU Fortran Compiler). [online] Available at:
 !>   https://gcc.gnu.org/onlinedocs/gfortran/index.html#SEC_Contents [Accessed 21 June 2020].
-!> - https://pl.wikipedia.org/wiki/Gra_w_%C5%BCycie
-!> - https://en.wikipedia.org/wiki/Gun_(cellular_automaton)
+!> - Pl.wikipedia.org. 2020. Gra W Życie. [online] Available at:
+!>   https://pl.wikipedia.org/wiki/Gra_w_%C5%BCycie [Accessed 24 June 2020].
+!> - En.wikipedia.org. 2020. Gun (Cellular Automaton). [online] Available at:
+!>   https://en.wikipedia.org/wiki/Gun_(cellular_automaton) [Accessed 26 June 2020].
 !>
 program cgol
 
@@ -64,7 +66,7 @@ program cgol
      case (1)
         call cgol_config_new(c1)
      case (2)
-        call cgol_life(c1(3,1), w1, c1(4,1), (c1(5,1)/100.00), c1(6,1), c1(7,1), c1(8,1), c1(9,1))
+        call cgol_life(w1, c1)        
      case default
         o1 = 0
         call system("clear")
