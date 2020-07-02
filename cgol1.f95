@@ -37,7 +37,7 @@ contains
   subroutine cgol_comment( p_t )
 
     implicit none
-    character( len = * ) :: p_t
+    character(len = *) :: p_t
 
     write(*,*) p_t
     write(*,*)
@@ -235,7 +235,9 @@ contains
           call random_number(r1)
           if (r1.gt.p_f1) then
              p_w1(i1,j1) = 1
-          end if
+          else
+             p_w1(i1,j1) = 0
+          endif
        end do
     end do
 
@@ -319,8 +321,90 @@ contains
     p_w1 = w2
     
   end subroutine cgol_calculate_iteration
-  
 
+
+  !> cgol_save_world_file - Save a copy of the current p_w1 matrix.
+  !>
+  !> Arguments: 
+  !> - p_w1: world matrix.
+  !> - p_s1: file name to save.
+  !>   - If equal to "na" then it will ask for a name for the file
+  !>
+  subroutine cgol_save_world_file(p_w1, p_s1)
+
+    implicit none
+    integer, dimension( : , : ) :: p_w1
+    character(len = *) :: p_s1
+    character(254) :: s1
+    character(1) :: s2
+    
+    if (trim(p_s1).eq."na") then
+       call cgol_comment("Save current world file (y/n)?")
+       read(*,*) s2
+       if (s2.eq."y") then
+          call cgol_comment("Name of the current world file to be saved?")
+          read(*,*) s1
+          open(11, file = trim(s1))
+          write(11,*) p_w1
+          close(11)
+       end if
+    else
+       open(11, file = trim(p_s1))
+       write(11,*) p_w1
+       close(11)
+    end if
+    
+  end subroutine cgol_save_world_file
+
+
+  !> cgol_find_and replace_string - If substring p_s1 is found in p_s2
+  !> it s replaced with p_s3.
+  !>
+  !>
+  !>
+  function cgol_find_and_replace_string(p_s1, p_s2, p_s3) result(res)
+
+    implicit none
+    character(len = *) :: p_s1, p_s2, p_s3
+    character(len(p_s2)+len(p_s3)) :: res
+    integer :: n1
+
+    n1 = index(p_s2, p_s1)
+
+    ! Only do this if p_s1 is found in s2
+    if (n1.gt.1) then
+       res = trim(p_s2(1:(n1-1))//p_s3//p_s2(n1+len(p_s1):))
+    else
+       res = trim(p_s2)
+    end if
+
+  end function cgol_find_and_replace_string
+  
+  
+  !> cgol_create_fname - Creates an experiment file name.
+  !>
+  !> Arguments:
+  !> - p_e1: prepend text.
+  !>
+  subroutine cgol_create_fname(p_e1)
+
+    character(len = *) :: p_e1
+    character(8)  :: date
+    character(10) :: time
+    character(5)  :: zone
+    !character(len(p_e1)+len(date)+len(time)+len(zone)) :: e2
+    integer, dimension(8) :: values
+    
+    call date_and_time(date, time, zone, values)
+    call date_and_time(DATE=date, ZONE=zone)
+    call date_and_time(TIME=time)
+    !e2 = p_e1//date//time
+    !print '(a)', e2
+    print '(a)', cgol_find_and_replace_string(".", p_e1//date//time, "_")
+    !read(*,*)
+  end subroutine cgol_create_fname
+  
+  
   !> cgol_life - Start an instance of a game.
   !>
   !> Arguments:
@@ -335,13 +419,27 @@ contains
     implicit none
     integer :: i1, j1, t1
     integer, dimension( : , : ) :: p_w1, p_c1
-
+    character(254) :: s1
+    
     i1 = 0
     j1 = 0
+
+    ! Generate file name if so configured.
+    ! https://gcc.gnu.org/onlinedocs/gfortran/DATE_005fAND_005fTIME.html
+    call cgol_create_fname("exp_")
     
     !> Generation of the initial world conditions.
-    call cgol_randomize_world(p_w1, (p_c1(5,1)/100.00))
-          
+    if (p_c1(9,1).eq.0) then
+       call cgol_randomize_world(p_w1, (p_c1(5,1)/100.00))
+       call cgol_save_world_file(p_w1, "na")
+    else
+       call cgol_comment("Name of the world file to be loaded?")
+       read(*,*) s1
+       open(11, file = trim(s1))
+       read(11,*) p_w1
+       close(11)
+    end if
+    
     !> Repeat this p_t1 times.
     do t1 = 1, p_c1(4,1)
 
@@ -360,7 +458,7 @@ contains
        
     end do
 
-    read(*,*)
+    call cgol_save_world_file(p_w1, "na")
     
   end subroutine cgol_life
 
