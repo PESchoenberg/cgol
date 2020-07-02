@@ -44,12 +44,11 @@ program cgol
   
   implicit none
   integer :: o1
-  integer, dimension(30,135) :: w1
+  integer, dimension(:,:), allocatable :: w1
   integer, dimension(9,1) :: c1
   
   ! Initial configuration.
   c1 = 0
-  w1 = 0
   o1 = 1  
   call cgol_config_init(c1)
     
@@ -66,7 +65,9 @@ program cgol
      case (1)
         call cgol_config_new(c1)
      case (2)
-        call cgol_life(w1, c1)        
+        allocate(w1(c1(1,1),c1(2,1)))
+        call cgol_life(w1, c1)
+        deallocate (w1)
      case default
         o1 = 0
         call system("clear")

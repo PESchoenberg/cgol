@@ -97,7 +97,7 @@ contains
     cgol_rule_b3s234 = res
 
   end function cgol_rule_b3s234
-  
+
 
   !> cgol_apply_rule - Applies scpecified rule.
   !>

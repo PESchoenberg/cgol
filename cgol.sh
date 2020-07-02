@@ -29,4 +29,3 @@ gfortran -std='gnu' -c cgol1.f95 cgol2.f95 cgol3.f95 -O3 -march=native -Wall -We
 echo 'Linking...'
 gfortran -std='gnu' cgol.f95 cgol1.o cgol2.o cgol3.o -o cgol -O3 -march=native -Wall -Wextra -fopenmp
 
-
