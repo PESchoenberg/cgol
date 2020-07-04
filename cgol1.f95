@@ -386,22 +386,23 @@ contains
   !> Arguments:
   !> - p_e1: prepend text.
   !>
-  subroutine cgol_create_fname(p_e1)
+  !> Sources:
+  !> - https://gcc.gnu.org/onlinedocs/gfortran/DATE_005fAND_005fTIME.html
+  !>
+  subroutine cgol_create_fname(p_e1, p_s1)
 
-    character(len = *) :: p_e1
+    implicit none
+    character(len = *) :: p_e1, p_s1
     character(8)  :: date
     character(10) :: time
     character(5)  :: zone
-    !character(len(p_e1)+len(date)+len(time)+len(zone)) :: e2
     integer, dimension(8) :: values
     
     call date_and_time(date, time, zone, values)
     call date_and_time(DATE=date, ZONE=zone)
     call date_and_time(TIME=time)
-    !e2 = p_e1//date//time
-    !print '(a)', e2
-    print '(a)', cgol_find_and_replace_string(".", p_e1//date//time, "_")
-    !read(*,*)
+    p_s1 = cgol_find_and_replace_string(".", p_e1//date//time, "_")
+    
   end subroutine cgol_create_fname
   
   
@@ -419,19 +420,18 @@ contains
     implicit none
     integer :: i1, j1, t1
     integer, dimension( : , : ) :: p_w1, p_c1
-    character(254) :: s1
+    character(22) :: s1
     
     i1 = 0
     j1 = 0
 
     ! Generate file name if so configured.
-    ! https://gcc.gnu.org/onlinedocs/gfortran/DATE_005fAND_005fTIME.html
-    call cgol_create_fname("exp_")
+    call cgol_create_fname("exp_", s1)
     
     !> Generation of the initial world conditions.
     if (p_c1(9,1).eq.0) then
        call cgol_randomize_world(p_w1, (p_c1(5,1)/100.00))
-       call cgol_save_world_file(p_w1, "na")
+       call cgol_save_world_file(p_w1, s1//"_ini.dat")
     else
        call cgol_comment("Name of the world file to be loaded?")
        read(*,*) s1
@@ -458,7 +458,7 @@ contains
        
     end do
 
-    call cgol_save_world_file(p_w1, "na")
+    call cgol_save_world_file(p_w1, s1//"_end.dat")
     
   end subroutine cgol_life
 
