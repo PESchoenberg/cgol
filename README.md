@@ -1,6 +1,9 @@
 # cgol - Conway's game of life.
 
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3930368.svg)](https://doi.org/10.5281/zenodo.3930368)
+
+
 ## Overview:
 
 A simple version of Conway's game of life written in Fortran and OpenMP.
