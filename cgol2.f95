@@ -45,16 +45,12 @@ contains
     if (p_e1.ne.1) then
        if (p_n1.eq.3) then
           res = 1
-       else
-          res = 0
        end if
     else if (p_e1.eq.1) then
        if (p_n1.eq.2) then
           res = 1
        else if (p_n1.eq.3) then
           res = 1
-       else
-          res = 0
        end if
     end if
 
@@ -63,7 +59,7 @@ contains
   end function cgol_rule_b3s23
 
 
-  !> cgol_rule_b3s234 - Applies rule b3s23.
+  !> cgol_rule_b3s234 - Applies rule b3s24.
   !>
   !> Arguments:
   !> - p_e1: value of the element being evaluated.
@@ -79,8 +75,6 @@ contains
     if (p_e1.ne.1) then
        if (p_n1.eq.3) then
           res = 1
-       else
-          res = 0
        end if
     else if (p_e1.eq.1) then
        if (p_n1.eq.2) then
@@ -89,8 +83,6 @@ contains
           res = 1
        else if (p_n1.eq.4) then
           res = 1          
-       else
-          res = 0
        end if
     end if
 
@@ -104,6 +96,7 @@ contains
   !> Arguments:
   !> - p_r1: rule specification.
   !>   - 1: applies rule b3s23.
+  !>   - 2: applies rule b3s24.
   !>   - Default: applies rule b3s23.
   !>
   integer function cgol_apply_rule(p_r1, p_e1, p_n1)
