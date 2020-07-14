@@ -45,8 +45,8 @@ contains
   end subroutine cgol_comment
 
 
-  !> cgol_eval_neighborhood_moore - Returns the number of
-  !> elements alive in the Moore neighborhood of an element.
+  !> cgol_eval_neighborhood_moore - Returns the number of elements
+  !> alive in the Moore neighborhood of an element.
   !>
   !> Arguments:
   !> - p_w1: world matrix.
@@ -54,7 +54,9 @@ contains
   !> - p_j1: j value.
   !>
   !> Sources:
-  !> - https://en.wikipedia.org/wiki/Moore_neighborhood
+  !> - En.wikipedia.org. 2020. Moore Neighborhood. [online] Available 
+  !>   at: https://en.wikipedia.org/wiki/Moore_neighborhood
+  !>   [Accessed 6 July 2020].
   !>
   integer function cgol_eval_neighborhood_moore(p_w1, p_i1, p_j1)
 
@@ -93,7 +95,7 @@ contains
        hn2 = p_j1 + 1
     end if
 
-    ! Assign values to secondary matrix.
+    !> Assign values to secondary matrix.
     w2(1,1) = p_w1(lm2, ln2)
     w2(1,2) = p_w1(lm2, p_j1)
     w2(1,3) = p_w1(lm2, hn2)
@@ -104,15 +106,14 @@ contains
     w2(3,2) = p_w1(hm2, p_j1)
     w2(3,3) = p_w1(hm2, hn2)
 
-    ! Calculate proximity value.
+    !> Calculate proximity value.
     cgol_eval_neighborhood_moore = sum(W2) - w2(2,2)
     
   end function cgol_eval_neighborhood_moore
 
 
-  !> cgol_eval_neighborhood_von_neumann - Returns the number
-  !> of elements alive in the Von Neumann neighborhood of
-  !> an element.
+  !> cgol_eval_neighborhood_von_neumann - Returns the number of elements
+  !> alive in the Von Neumann neighborhood of an element.
   !>
   !> Arguments:
   !> - p_w1: world matrix.
@@ -120,8 +121,10 @@ contains
   !> - p_j1: j value.
   !>
   !> Sources:
-  !> - https://en.wikipedia.org/wiki/Von_Neumann_neighborhood
-  !>  
+  !> - En.wikipedia.org. 2020. Von Neumann Neighborhood. [online] Available 
+  !>   at: https://en.wikipedia.org/wiki/Von_Neumann_neighborhood
+  !>   [Accessed 13 July 2020].
+  !>
   integer function cgol_eval_neighborhood_von_neumann(p_w1, p_i1, p_j1)
 
     implicit none
@@ -159,7 +162,7 @@ contains
        hn2 = p_j1 + 1
     end if
 
-    ! Assign values to secondary matrix.
+    !> Assign values to secondary matrix.
     w2(1,1) = 0
     w2(1,2) = p_w1(lm2, p_j1)
     w2(1,3) = 0
@@ -170,7 +173,7 @@ contains
     w2(3,2) = p_w1(hm2, p_j1)
     w2(3,3) = 0
 
-    ! Calculate proximity value.
+    !> Calculate proximity value.
     cgol_eval_neighborhood_von_neumann = sum(W2) - w2(2,2)
 
   end function cgol_eval_neighborhood_von_neumann
@@ -222,14 +225,14 @@ contains
     hm1 = size(p_w1, 1) ! Rows.
     hn1 = size(p_w1, 2) ! Columns.
 
-    ! Set random number generation.
+    !> Set random number generation.
     call random_seed() ! initialize with system generated seed
     call random_seed(size=s1) ! find out size of seed
     allocate(seed(s1))
     call random_seed(put=seed)
     call random_seed(get=seed)
 
-    ! Generate random 1 values in w1.
+    !> Generate random 1 values in w1.
     do j1 = 1, hn1
        do i1 = 1, hm1
           call random_number(r1)
@@ -241,7 +244,7 @@ contains
        end do
     end do
 
-    ! Clean-up.
+    !> Clean-up.
     deallocate(seed)
     
   end subroutine cgol_randomize_world
@@ -360,7 +363,10 @@ contains
   !> cgol_find_and replace_string - If substring p_s1 is found in p_s2
   !> it s replaced with p_s3.
   !>
-  !>
+  !> Arguments:
+  !> - p_s1: string. What needs to be found in p_s1.
+  !> - p_s2: string. Where to look fo p_s1.
+  !> - p_s3: string. What to replace p_s1 with within p_s2.
   !>
   function cgol_find_and_replace_string(p_s1, p_s2, p_s3) result(res)
 
@@ -371,7 +377,7 @@ contains
 
     n1 = index(p_s2, p_s1)
 
-    ! Only do this if p_s1 is found in s2
+    !> Only do this if p_s1 is found in s2
     if (n1.gt.1) then
        res = trim(p_s2(1:(n1-1))//p_s3//p_s2(n1+len(p_s1):))
     else
@@ -388,6 +394,9 @@ contains
   !>
   !> Sources:
   !> - https://gcc.gnu.org/onlinedocs/gfortran/DATE_005fAND_005fTIME.html
+  !> - Gcc.gnu.org. 2020. DATE_AND_TIME (The GNU Fortran Compiler). [online]
+  !>   Available at: https://gcc.gnu.org/onlinedocs/gfortran/DATE_005fAND_005fTIME.html
+  !<   [Accessed 13 July 2020].
   !>
   subroutine cgol_create_fname(p_e1, p_s1)
 
@@ -404,6 +413,32 @@ contains
     p_s1 = cgol_find_and_replace_string(".", p_e1//date//time, "_")
     
   end subroutine cgol_create_fname
+
+
+  !> cgol_edit_world - Edit the values of the w1 matrix.
+  !>
+  !> Arguments:
+  !> - p_n1: type of world map.
+  !>   - 0: create a new world map and edit.
+  !>   - 1: load an existing world map and edit.
+  !> - p_c1: configuration matrix.
+  !>
+  subroutine cgol_edit_world(p_n1, p_c1)
+
+    implicit none
+    integer :: p_n1, n1
+    integer, dimension( : , : ) :: p_c1 
+       
+    select case (n1)       
+    case (0)
+       n1 = 0
+    case (1)
+       n1 = 1
+    case default
+       n1 = 0
+    end select
+       
+  end subroutine cgol_edit_world  
   
   
   !> cgol_life - Start an instance of a game.
@@ -425,7 +460,7 @@ contains
     i1 = 0
     j1 = 0
 
-    ! Generate file name if so configured.
+    !> Generate file name if so configured.
     call cgol_create_fname("exp_", s1)
     
     !> Generation of the initial world conditions.
@@ -443,6 +478,9 @@ contains
     !> Repeat this p_t1 times.
     do t1 = 1, p_c1(4,1)
 
+       !> We use OpenMP here to create two threads. One will deal
+       !> with displaying the world at each interation, while the
+       !> other will perform all calculations.
        !$OMP SECTIONS
 
        !$OMP SECTION

@@ -38,21 +38,21 @@
 !>
 program cgol
 
-  use omp_lib
+  use omp_lib ! OpenMP
   use cgol1
   use cgol3
   
   implicit none
-  integer :: o1
-  integer, dimension(:,:), allocatable :: w1
-  integer, dimension(9,1) :: c1
+  integer :: o1 ! Menu option
+  integer, dimension(:,:), allocatable :: w1 ! World array.
+  integer, dimension(9,1) :: c1 ! Config array.
   
-  ! Initial configuration.
+  !> Initial configuration.
   c1 = 0
   o1 = 1  
   call cgol_config_init(c1)
     
-  ! Main menu cycle.
+  !> Main menu cycle.
   do while (o1 > 0)
      call system("clear")
      call cgol_comment("Select your option:")

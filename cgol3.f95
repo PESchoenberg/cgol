@@ -41,42 +41,44 @@ contains
     implicit none
     integer, dimension( : , :) :: p_c1
     
-    ! m1 - w1 rows.
+    !> m1 - w1 rows.
     p_c1(1,1) = 30
 
-    ! n1 - w1 cols.
+    !> n1 - w1 cols.
     p_c1(2,1) = 135
 
-    ! o2 - Neighborhood type.
-    !      - 0: Von Neumann.
-    !      - 1: Moore.
+    !> o2 - Neighborhood type.
+    !>      - 0: Von Neumann (1).
+    !>      - 1: Moore (1).
     p_c1(3,1) = 1
 
-    ! t1 - Max number of iterations or ticks.
-    p_c1(4,1) = 2000
+    !> t1 - Number of iterations or ticks.
+    p_c1(4,1) = 1000
 
-    ! f1 - Initial percentage of cells alive.
+    !> f1 - Initial percentage of cells alive.
     p_c1(5,1) = 75
 
-    ! r1 - Rule.
+    !> r1 - Rule.
     p_c1(6,1) = 1
 
-    ! t3 - Stop on iter.
-    !      - 0: Don't stop.
-    !      - 1: stop (requires the user to press [enter] after each iteration.
+    !> t3 - Stop on iter.
+    !>      - 0: Don't stop.
+    !>      - 1: stop, requires the user to press [enter] after each iteration.
     p_c1(7,1) = 0
 
-    ! t4 - Wait on iter. Number of seconds that the simulation will wait after each iter.
+    !> t4 - Wait on iter. Number of seconds that the simulation will wait after each iter.
     p_c1(8,1) = 0
 
-    ! t6 - Initial world map. TODO.
-    !      - 0: Random.
-    !      - > 0: map number.
+    !> t6 - Initial world map. This allows the use of custom-made world maps if so desired
+    !> otherwise, the world map will be created as the result of a random function. World
+    !> maps are saved in the beginning and at the end of each simulation.
+    !>      - 0: Random.
+    !>      - > 0: map number.
     p_c1(9,1) = 0
 
   end subroutine cgol_config_init
 
-
+    
   !> cgol_config_custom - Sets an user - defined configuration.
   !>
   !> Arguments:
@@ -90,7 +92,7 @@ contains
 
     o1 = 1
     
-    ! Menu cycle.
+    !> Menu cycle.
     do while (o1 > 0)
        call system("clear")
        call cgol_comment("Select your option:")
@@ -104,6 +106,7 @@ contains
        call cgol_comment("7 - Stop on iteration.")
        call cgol_comment("8 - Wait on iteration.")
        call cgol_comment("9 - Initial world map.")
+       call cgol_comment("10 - Edit world map.")
        read(*,*) o1
 
        call system("clear")
@@ -163,7 +166,15 @@ contains
              p_c1(9,1) = n1
           else
              p_c1(9,1) = 0
-          endif          
+          endif
+       case (10)
+          call cgol_comment("10 - Edit world map [0] (0 =  new, 1 = existing world)?")
+          read (*,*) n1
+          if (n1.eq.1) then
+             call cgol_edit_world(1, p_c1)
+          else
+             call cgol_edit_world(0, p_c1)
+          endif
        case default
           o1 = 0          
        end select
@@ -186,7 +197,7 @@ contains
 
     o1 = 1
     
-    ! Menu cycle.
+    !> Menu cycle.
     do while (o1 > 0)
        call system("clear")
        call cgol_comment("Select your option:")
